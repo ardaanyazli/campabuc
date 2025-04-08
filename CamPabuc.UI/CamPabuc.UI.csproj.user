@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_LastSelectedProfileId>C:\Users\ardaa\Documents\Git\Aetherstalker\CamPabuc\CamPabuc.UI\Properties\PublishProfiles\ClickOnceProfile.pubxml</_LastSelectedProfileId>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="ManufacturerDetailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="ManufacturersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MdiContainerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="OptionDetailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="ShoeDetailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="ShoeSalesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="ShoesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,107 @@
+BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS "Manufacturer" (
+	"Id"	INTEGER NOT NULL,
+	"FirmName"	TEXT COLLATE NOCASE,
+	"Contact"	TEXT COLLATE NOCASE,
+	"PhoneNumber"	TEXT COLLATE NOCASE,
+	"Address"	TEXT COLLATE NOCASE,
+	PRIMARY KEY("Id")
+);
+CREATE TABLE IF NOT EXISTS "ShoeColor" (
+	"Id"	INTEGER NOT NULL,
+	"Name"	TEXT COLLATE NOCASE,
+	PRIMARY KEY("Id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "ShoeGenre" (
+	"Id"	INTEGER NOT NULL,
+	"Name"	TEXT COLLATE NOCASE,
+	PRIMARY KEY("Id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "ShoeCategory" (
+	"Id"	INTEGER NOT NULL,
+	"Name"	TEXT COLLATE NOCASE,
+	PRIMARY KEY("Id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "ShoeMaterial" (
+	"Id"	INTEGER NOT NULL,
+	"Name"	TEXT COLLATE NOCASE,
+	PRIMARY KEY("Id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "Shoe" (
+	"Id"	INTEGER NOT NULL,
+	"Genre"	INTEGER NOT NULL DEFAULT 1,
+	"Manufacturer"	INTEGER NOT NULL DEFAULT 1,
+	"QualityCode"	TEXT COLLATE NOCASE,
+	"ShoeCategory"	INTEGER DEFAULT 1,
+	"ShoeColor"	INTEGER DEFAULT 1,
+	"ShoeMaterial"	INTEGER DEFAULT 1,
+	"Size"	INTEGER,
+	"Quantity"	INTEGER,
+	"ShoeDetails"	TEXT COLLATE NOCASE,
+	"Price"	NUMERIC,
+	"SalePrice"	NUMERIC,
+	"ShoeBarcode"	TEXT COLLATE NOCASE,
+	FOREIGN KEY("Manufacturer") REFERENCES "Manufacturer"("Id"),
+	FOREIGN KEY("ShoeMaterial") REFERENCES "ShoeMaterial"("Id"),
+	FOREIGN KEY("ShoeCategory") REFERENCES "ShoeCategory"("Id"),
+	FOREIGN KEY("Genre") REFERENCES "ShoeGenre"("Id"),
+	FOREIGN KEY("ShoeColor") REFERENCES "ShoeColor"("Id"),
+	PRIMARY KEY("Id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "AppSettings" (
+	"ID"	INTEGER NOT NULL,
+	"BarcodeWidth"	INTEGER,
+	"BarcodeHeight"	INTEGER,
+	"ChildSizeRange"	TEXT,
+	"WomenSizeRange"	TEXT,
+	"MenSizeRange"	TEXT,
+	"DoubleQtySizeList"	TEXT,
+	PRIMARY KEY("ID")
+);
+CREATE TABLE IF NOT EXISTS "Sale"(
+	"Id"	INTEGER NOT NULL,
+	"SaleCurency" INTEGER NOT NULL,
+	"Total" NUMERIC,
+	"SaleDate"	DATETIME DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY("Id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "SaleDetail"(
+	"Id"	INTEGER NOT NULL,
+	"SaleId" INTEGER NOT NULL,
+	"Barcode" TEXT COLLATE NOCASE,
+	"Quantity" INTEGER NOT NULL,
+	"Price" NUMERIC,
+	FOREIGN KEY("SaleId") REFERENCES "Sale"("Id"),
+	PRIMARY KEY("Id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "Refund"(
+	"Id"	INTEGER NOT NULL,
+	"ShoeId"	INTEGER NOT NULL,
+	"RefundDate"	DATETIME DEFAULT CURRENT_TIMESTAMP,
+	"RefundReason"	TEXT COLLATE NOCASE,
+	FOREIGN KEY("ShoeId") REFERENCES "Shoe"("Id"),
+	PRIMARY KEY("Id" AUTOINCREMENT)
+);
+
+INSERT INTO "Manufacturer" ("Id","FirmName","Contact","PhoneNumber","Address") VALUES (1,'ARDA KUNDURA','Arda SUNA','05353217841','Beyazıt');
+INSERT INTO "ShoeColor" ("Id","Name") VALUES (1,'Belirtilmedi'),
+ (2,'SİYAH'),
+ (3,'KAHVE'),
+ (4,'LACİVERT'),
+ (5,'TABA'),
+ (6,'YEŞİL'),
+ (7,'BEYAZ'),
+ (8,'BORDO'),
+ (9,'KIRMIZI'),
+ (10,'MAVİ'),
+ (11,'MOR'),
+ (12,'PEMBE'),
+ (13,'SARI');
+INSERT INTO "ShoeGenre" ("Id","Name") VALUES (1,'MERDANE'),
+ (2,'ZENNE');
+INSERT INTO "ShoeCategory" ("Id","Name") VALUES (1,'Belirtilmedi');
+INSERT INTO "ShoeMaterial" ("Id","Name") VALUES (1,'DERİ'),
+ (2,'TEKSTİL'),
+ (3,'DİĞER');
+INSERT INTO "AppSettings" ("ID","BarcodeWidth","BarcodeHeight","ChildSizeRange","WomenSizeRange","MenSizeRange","DoubleQtySizeList") VALUES (1,160,50,'25-39','35-40','40-48','37,38,40,41,42');
+COMMIT;
