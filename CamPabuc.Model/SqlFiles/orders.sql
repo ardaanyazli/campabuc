@@ -1,0 +1,6 @@
+CREATE TABLE orders(
+	id UUID NOT NULL PRIMARY KEY,
+	created_at TIMESTAMP NOT NULL DEFAULT(NOW()),
+	updated_at TIMESTAMP NULL,
+	status TINYINT NULL
+)
