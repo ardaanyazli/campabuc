@@ -9,6 +9,7 @@ namespace campabuc.data;
 
 public class ManufacturerRepository : IManufacturerRepository
 {
+    const string BASE_SELECT_QUERY = "SELECT id as Id,\"name\" as Name,address as Address,phone as Phone, contact_name as ContactName,created_at as CreatedAt,deleted_at as DeletedAt from manufacturers";
     private readonly IDbConnection connection;
 
     public ManufacturerRepository(string connectionString)
@@ -23,7 +24,7 @@ public class ManufacturerRepository : IManufacturerRepository
         if (connection.State != ConnectionState.Open)
             connection.Open();
 
-        string query = $"SELECT * from manufacturers WHERE {sqlFilter.Sql}";
+        string query = $"{BASE_SELECT_QUERY} WHERE {sqlFilter.Sql}";
 
         var result = await connection.QueryAsync<Manufacturer>(query, sqlFilter.Parameters);
 
@@ -37,7 +38,7 @@ public class ManufacturerRepository : IManufacturerRepository
         if (connection.State != ConnectionState.Open)
             connection.Open();
 
-        string query = "SELECT * from manufacturers where id=@id";
+        string query = $"{BASE_SELECT_QUERY} WHERE id=@id";
 
         var item = await connection.QuerySingleAsync<Manufacturer>(query, new { id });
 
@@ -51,8 +52,7 @@ public class ManufacturerRepository : IManufacturerRepository
         if (connection.State != ConnectionState.Open)
             connection.Open();
 
-        string query = "SELECT * from manufacturers";
-        var list = await connection.QueryAsync<Manufacturer>(query);
+        var list = await connection.QueryAsync<Manufacturer>(BASE_SELECT_QUERY);
 
         connection.Close();
 
