@@ -1,9 +1,9 @@
 using campabuc.model.interfaces;
 
 namespace campabuc.model;
-public class Manufacturer : IHasCreateDate, IHasDeleteDate, IHasIntId
+public class Manufacturer : IHasCreateDate, IHasDeleteDate, IHasNumberId
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public required string Name { get; set; }
     public string? Address { get; set; }
     public string? Phone { get; set; }

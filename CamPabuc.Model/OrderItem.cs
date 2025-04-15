@@ -2,9 +2,9 @@ using campabuc.model.interfaces;
 
 namespace campabuc.model;
 
-public class OrderItem : IHasCreateDate, IHasDeleteDate, IHasEpochId
+public class OrderItem : IHasCreateDate, IHasDeleteDate, IHasUUID
 {
-    public string Id { get; set; }
+    public required string Id { get; set; }
     public string? ShoeId { get; set; }
     public decimal? Discount { get; set; }
     public ushort Quantity { get; set; }

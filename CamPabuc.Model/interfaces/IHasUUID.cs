@@ -1,6 +1,6 @@
 namespace campabuc.model.interfaces;
 
-public interface IHasEpochId
+public interface IHasUUID
 {
     public string Id { get; set; }
 }

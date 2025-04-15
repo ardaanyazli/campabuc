@@ -5,5 +5,5 @@ CREATE TABLE order_items(
 	quantity BIGINT NOT NULL DEFAULT(0),
 	created_at TIMESTAMP NOT NULL DEFAULT(NOW()),
 	updated_at TIMESTAMP NULL,
-	status TINYINT NULL
+	status INT NULL
 )

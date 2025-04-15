@@ -2,9 +2,9 @@ using campabuc.model.interfaces;
 
 namespace campabuc.model;
 
-public class ShoeSize : IHasCreateDate, IHasDeleteDate, IHasIntId
+public class ShoeSize : IHasCreateDate, IHasDeleteDate, IHasNumberId
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public required string Name { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? DeletedAt { get; set; }
