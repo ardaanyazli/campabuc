@@ -59,4 +59,37 @@ public class ManufacturerRepository : IManufacturerRepository
         return list;
     }
 
+    public async Task<int> AddManufacturer(string name, string? address, string? phone, string? contact_name)
+    {
+        Dictionary<string, object> paramList = new Dictionary<string, object>();
+        paramList.Add("\"name\"", name);
+
+        if (!string.IsNullOrWhiteSpace(address))
+        {
+            paramList.Add("address", address);
+        }
+        if (!string.IsNullOrWhiteSpace(phone))
+        {
+            paramList.Add("phone", phone);
+        }
+        if (!string.IsNullOrWhiteSpace(contact_name))
+        {
+            paramList.Add("contact_name", contact_name);
+        }
+
+        string query = $"INSERT INTO manufacturers ({string.Join(",", paramList.Keys)}) VALUES ({string.Join(",", paramList.Keys.Select(x => x.Trim('"').Insert(0, "@")}) returning id";
+
+        connection.ExecuteScalarAsync<int>(query, new { name, address, phone, contact_name });
+
+    }
+
+    public async Task<bool> UpdateManufacturer()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<bool> DeleteManufacturer()
+    {
+        throw new NotImplementedException();
+    }
 }
