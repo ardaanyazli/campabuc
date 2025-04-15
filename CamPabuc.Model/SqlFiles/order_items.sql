@@ -8,9 +8,11 @@ CREATE TABLE order_items(
 	status INT NULL
 );
 CREATE INDEX ix_shoe_order_items_not_deleted
-	ON manufacturers(order_id)
+	ON order_items(order_id)
 	WHERE deleted_at IS  NULL;
+CREATE INDEX ix_order_items_status
+ON order_items(status)
+WHERE deleted_at IS NULL;
 CREATE INDEX ix_shoe_order_items_deleted
-	ON manufacturers(deleted_at)
+	ON order_items(deleted_at)
 	WHERE deleted_at IS NOT NULL;
-

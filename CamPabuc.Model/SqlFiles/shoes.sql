@@ -24,9 +24,6 @@ CREATE INDEX ix_shoes_not_deleted_size
 CREATE INDEX ix_shoes_not_deleted_manufacturer
 	ON shoes(manufacturer)
 	WHERE deleted_at IS NULL;
-CREATE INDEX ix_shoes_not_deleted_manufacturer
-	ON shoes(manufacturer)
-	WHERE deleted_at IS NULL;
 CREATE INDEX ix_shoes_deleted
 	ON shoes(deleted_at)
-	WHERE deleted_at IS NOT )
+	WHERE deleted_at IS NOT NULL;
