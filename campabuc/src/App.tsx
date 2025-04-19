@@ -1,8 +1,6 @@
-import React from 'react';
-import { invoke } from "@tauri-apps/api/core";
-import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './layout/MainLayout';
+import "./App.css";
 
 // Module routes
 import ManufacturersModule from './modules/manufacturers/ManufacturersModule';

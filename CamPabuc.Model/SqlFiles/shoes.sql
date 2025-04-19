@@ -8,6 +8,7 @@ CREATE TABLE shoes(
 	price DECIMAL(10,5) NOT NULL DEFAULT(0),
 	inventory INT NOT NULL DEFAULT(0),
 	created_at TIMESTAMP NOT NULL DEFAULT(NOW()),
+	updated_at TIMESTAMP  NULL ,
 	deleted_at TIMESTAMP  NULL ,
 	barcode VARCHAR(20) NULL,
 	img_url VARCHAR(255) NULL

@@ -80,7 +80,7 @@ export function getDB() {
 		throw new Error('Database not initialized. Call initDB() first.');
 	}
 	return {
-		select: (sql: string, params: any[] = []) => {
+		select: async (sql: string, params: any[] = []) => {
 			const stmt = dbInstance.prepare(sql);
 			stmt.bind(params);
 			const results = [];
@@ -90,7 +90,7 @@ export function getDB() {
 			stmt.free();
 			return results;
 		},
-		execute: (sql: string, params: any[] = []) => {
+		execute: async (sql: string, params: any[] = []) => {
 			const stmt = dbInstance.prepare(sql);
 			stmt.bind(params);
 			stmt.step();

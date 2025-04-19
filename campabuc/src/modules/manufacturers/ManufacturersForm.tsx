@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getManufacturerById, saveManufacturer } from '../../services/manufacturers';
+import { Card } from '@/components/ui/card';
 
 export default function ManufacturersForm() {
 	const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function ManufacturersForm() {
 
 	return (
 		<form onSubmit={handleSubmit}>
-			<h1>{id ? 'Edit Manufacturer' : 'New Manufacturer'}</h1>
+			<Card className="p-1 items-center m-4">{id ? 'Edit Manufacturer' : 'New Manufacturer'}</Card>
 			<input name="name" placeholder="Name" value={form.name} onChange={handleChange} />
 			<input name="address" placeholder="Address" value={form.address} onChange={handleChange} />
 			<input name="phone" placeholder="Phone" value={form.phone} onChange={handleChange} />

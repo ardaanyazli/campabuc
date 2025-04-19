@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getColorById, saveColor } from '../../services/colors';
+import { Card } from '@/components/ui/card';
 
 export default function ColorsForm() {
 	const navigate = useNavigate();
@@ -24,7 +25,7 @@ export default function ColorsForm() {
 
 	return (
 		<form onSubmit={handleSubmit}>
-			<h1>{id ? 'Edit Color' : 'New Color'}</h1>
+			<Card className="p-1 items-center m-4">{id ? 'Edit Color' : 'New Color'}</Card>
 			<input name="name" placeholder="Name" value={form.name} onChange={handleChange} />
 			<button type="submit">Save</button>
 		</form>

@@ -1,8 +1,9 @@
 CREATE TABLE IF NOT EXISTS orders(
 	id UUID NOT NULL PRIMARY KEY,
-	created_at TIMESTAMP NOT NULL DEFAULT(NOW()),
-	deleted_at TIMESTAMP NULL,
 	status INT NULL
+	created_at TIMESTAMP NOT NULL DEFAULT(NOW()),
+	updated_at TIMESTAMP  NULL ,
+	deleted_at TIMESTAMP NULL,
 );
 CREATE INDEX ix_orders_not_deleted_created
 ON orders(created_at)

@@ -4,6 +4,7 @@ CREATE TABLE order_items(
 	item_id UUID NOT NULL REFERENCES SHOES(ID),
 	quantity BIGINT NOT NULL DEFAULT(0),
 	created_at TIMESTAMP NOT NULL DEFAULT(NOW()),
+	updated_at TIMESTAMP  NULL ,
 	deleted_at TIMESTAMP NULL,
 	status INT NULL
 );

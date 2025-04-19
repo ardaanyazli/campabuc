@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getColors, loadColors } from '../../services/colors';
 import { Link } from 'react-router-dom';
+import { Card } from '@/components/ui/card';
 
 export default function ColorsList() {
 	const [colors, setColors] = useState<any[]>([]);
@@ -11,7 +12,7 @@ export default function ColorsList() {
 
 	return (
 		<div>
-			<h1>Colors</h1>
+			<Card className="p-1 items-center m-4">Colors</Card>
 			<Link to="/colors/new">+ New Color</Link>
 			<ul>
 				{colors.map((color) => (

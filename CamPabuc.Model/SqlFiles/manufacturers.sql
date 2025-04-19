@@ -5,6 +5,7 @@ CREATE TABLE manufacturers(
 	phone VARCHAR(20) NULL,
 	contact_name VARCHAR(50) NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT(NOW()),
+	updated_at TIMESTAMP  NULL ,
 	deleted_at TIMESTAMP NULL
 );
 
