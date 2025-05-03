@@ -56,3 +56,4 @@ nunit-*.xml
 .vscode
 .idea
 node_modules
+.DS_Store
