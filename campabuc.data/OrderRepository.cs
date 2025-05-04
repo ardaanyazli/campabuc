@@ -16,6 +16,16 @@ public class OrderRepository : IOrderRepository
         connection = new NpgsqlConnection(connectionString);
     }
 
+    public Task<int> AddOrder()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> DeleteOrder()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<IEnumerable<Order>> Filter(Expression<Func<Order, bool>> predicate)
     {
         var sqlFilter = SqlPredicateBuilder.ToSqlFilter(predicate);
@@ -59,4 +69,8 @@ public class OrderRepository : IOrderRepository
         return list;
     }
 
+    public Task<bool> UpdateOrder()
+    {
+        throw new NotImplementedException();
+    }
 }

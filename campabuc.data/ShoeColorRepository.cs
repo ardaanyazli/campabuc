@@ -15,6 +15,16 @@ public class ShoeColorRepository : IShoeColorRepository
         connection = new NpgsqlConnection(connectionString);
     }
 
+    public Task<int> AddShoeColor()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> DeleteShoeColor()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<IEnumerable<ShoeColor>> Filter(Expression<Func<ShoeColor, bool>> predicate)
     {
         var sqlFilter = SqlPredicateBuilder.ToSqlFilter(predicate);
@@ -57,4 +67,8 @@ public class ShoeColorRepository : IShoeColorRepository
         return list;
     }
 
+    public Task<bool> UpdateShoeColor()
+    {
+        throw new NotImplementedException();
+    }
 }

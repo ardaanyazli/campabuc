@@ -16,6 +16,16 @@ public class ShoeSizeRepository : IShoeSizeRepository
         connection = new NpgsqlConnection(connectionString);
     }
 
+    public Task<int> AddShoeSize()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> DeleteShoeSize()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<IEnumerable<ShoeSize>> Filter(Expression<Func<ShoeSize, bool>> predicate)
     {
         var sqlFilter = SqlPredicateBuilder.ToSqlFilter(predicate);
@@ -59,4 +69,8 @@ public class ShoeSizeRepository : IShoeSizeRepository
         return list;
     }
 
+    public Task<bool> UpdateShoeSize()
+    {
+        throw new NotImplementedException();
+    }
 }

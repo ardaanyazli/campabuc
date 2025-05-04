@@ -77,9 +77,10 @@ public class ManufacturerRepository : IManufacturerRepository
             paramList.Add("contact_name", contact_name);
         }
 
-        string query = $"INSERT INTO manufacturers ({string.Join(",", paramList.Keys)}) VALUES ({string.Join(",", paramList.Keys.Select(x => x.Trim('"').Insert(0, "@")}) returning id";
+        string query = $"INSERT INTO manufacturers ({string.Join(",", paramList.Keys)}) VALUES ({string.Join(",", paramList.Keys.Select(x => x.Trim('"').Insert(0, "@")))}) returning id";
 
-        connection.ExecuteScalarAsync<int>(query, new { name, address, phone, contact_name });
+        int id = await connection.ExecuteScalarAsync<int>(query, new { name, address, phone, contact_name });
+        return id;
 
     }
 
@@ -89,6 +90,11 @@ public class ManufacturerRepository : IManufacturerRepository
     }
 
     public async Task<bool> DeleteManufacturer()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<int> AddManufacturer()
     {
         throw new NotImplementedException();
     }
