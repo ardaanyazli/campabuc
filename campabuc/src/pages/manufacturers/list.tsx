@@ -1,5 +1,4 @@
 import { DataTable } from "@/components/data-table";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
 import { fetchPageData } from "@/lib/data-fetch";
 const ManufacturerList = () => {
@@ -13,7 +12,7 @@ const ManufacturerList = () => {
     getData();
   }, []);
   return !pageData ? (
-    <Skeleton>Loading</Skeleton>
+    <span>Loading</span>
   ) : (
     <DataTable data={pageData.products} />
   );
