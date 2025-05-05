@@ -81,7 +81,7 @@ export function DataTable<TData>({
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     enableRowSelection: true,
-    getRowId: (row) => Object.values(row).join("-"),
+    getRowId: (row: any) => Object.values(row).join("-"),
   });
 
   return (
