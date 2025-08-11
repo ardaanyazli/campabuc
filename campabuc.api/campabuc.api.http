@@ -1,6 +1,233 @@
-@CamPabuc.API_HostAddress = http://localhost:5109
+@CamPabuc.API_HostAddress = https://localhost:7273
+@CamPabuc.API_HostAddress_HTTP = http://localhost:5109
 
-GET {{CamPabuc.API_HostAddress}}/weatherforecast/
+### SHOE ENDPOINTS ###
+
+# Get all shoes
+GET {{CamPabuc.API_HostAddress}}/api/shoes
 Accept: application/json
+
+###
+
+# Get shoe by ID (replace with actual GUID)
+GET {{CamPabuc.API_HostAddress}}/api/shoes/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+###
+
+# Create a new shoe
+POST {{CamPabuc.API_HostAddress}}/api/shoes
+Content-Type: application/json
+
+{
+  "barcode": "SH001234567890",
+  "gender": 3,
+  "price": 89.99,
+  "color": "Black",
+  "description": "Comfortable running shoes",
+  "stock": 50,
+  "manufacturerId": null,
+  "categoryId": null
+}
+
+###
+
+# Update a shoe (replace with actual GUID)
+PUT {{CamPabuc.API_HostAddress}}/api/shoes/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+{
+  "barcode": "SH001234567890",
+  "gender": 3,
+  "price": 99.99,
+  "color": "Black",
+  "description": "Updated comfortable running shoes",
+  "stock": 45,
+  "manufacturerId": null,
+  "categoryId": null,
+  "isActive": true
+}
+
+###
+
+# Delete a shoe (replace with actual GUID)
+DELETE {{CamPabuc.API_HostAddress}}/api/shoes/00000000-0000-0000-0000-000000000000
+
+###
+
+### MANUFACTURER ENDPOINTS ###
+
+# Get all manufacturers
+GET {{CamPabuc.API_HostAddress}}/api/manufacturers
+Accept: application/json
+
+###
+
+# Get manufacturer by ID (replace with actual GUID)
+GET {{CamPabuc.API_HostAddress}}/api/manufacturers/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+###
+
+# Create a new manufacturer
+POST {{CamPabuc.API_HostAddress}}/api/manufacturers
+Content-Type: application/json
+
+{
+  "name": "Nike Inc.",
+  "phone": "+1-555-0123",
+  "address": "One Bowerman Drive, Beaverton, OR 97005, USA"
+}
+
+###
+
+# Update a manufacturer (replace with actual GUID)
+PUT {{CamPabuc.API_HostAddress}}/api/manufacturers/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+{
+  "name": "Nike Corporation",
+  "phone": "+1-555-0124",
+  "address": "One Bowerman Drive, Beaverton, OR 97005, USA",
+  "isActive": true
+}
+
+###
+
+# Delete a manufacturer (replace with actual GUID)
+DELETE {{CamPabuc.API_HostAddress}}/api/manufacturers/00000000-0000-0000-0000-000000000000
+
+###
+
+### CONTACT ENDPOINTS ###
+
+# Get all contacts
+GET {{CamPabuc.API_HostAddress}}/api/contacts
+Accept: application/json
+
+###
+
+# Get contact by ID (replace with actual GUID)
+GET {{CamPabuc.API_HostAddress}}/api/contacts/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+###
+
+# Create a new contact
+POST {{CamPabuc.API_HostAddress}}/api/contacts
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "contactInfos": null
+}
+
+###
+
+# Update a contact (replace with actual GUID)
+PUT {{CamPabuc.API_HostAddress}}/api/contacts/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+{
+  "name": "John Smith",
+  "isActive": true,
+  "contactInfos": null
+}
+
+###
+
+# Delete a contact (replace with actual GUID)
+DELETE {{CamPabuc.API_HostAddress}}/api/contacts/00000000-0000-0000-0000-000000000000
+
+###
+
+### CONTACT INFO ENDPOINTS ###
+
+# Get all contact infos
+GET {{CamPabuc.API_HostAddress}}/api/contactinfos
+Accept: application/json
+
+###
+
+# Get contact info by ID (replace with actual GUID)
+GET {{CamPabuc.API_HostAddress}}/api/contactinfos/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+###
+
+# Get contact infos by contact ID (replace with actual GUID)
+GET {{CamPabuc.API_HostAddress}}/api/contacts/00000000-0000-0000-0000-000000000000/contactinfos
+Accept: application/json
+
+###
+
+# Create a new contact info
+POST {{CamPabuc.API_HostAddress}}/api/contactinfos
+Content-Type: application/json
+
+{
+  "infoType": 1,
+  "value": "john.doe@example.com",
+  "contactId": "00000000-0000-0000-0000-000000000000"
+}
+
+###
+
+# Create phone contact info
+POST {{CamPabuc.API_HostAddress}}/api/contactinfos
+Content-Type: application/json
+
+{
+  "infoType": 2,
+  "value": "+1-555-0199",
+  "contactId": "00000000-0000-0000-0000-000000000000"
+}
+
+###
+
+# Create address contact info
+POST {{CamPabuc.API_HostAddress}}/api/contactinfos
+Content-Type: application/json
+
+{
+  "infoType": 3,
+  "value": "123 Main St, Anytown, ST 12345",
+  "contactId": "00000000-0000-0000-0000-000000000000"
+}
+
+###
+
+# Update a contact info (replace with actual GUID)
+PUT {{CamPabuc.API_HostAddress}}/api/contactinfos/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+{
+  "infoType": 1,
+  "value": "john.smith@example.com",
+  "contactId": "00000000-0000-0000-0000-000000000000",
+  "isActive": true
+}
+
+###
+
+# Delete a contact info (replace with actual GUID)
+DELETE {{CamPabuc.API_HostAddress}}/api/contactinfos/00000000-0000-0000-0000-000000000000
+
+###
+
+### ENUM REFERENCE ###
+# ShoeGender values (can be combined with bitwise OR):
+# Male = 1
+# Female = 2  
+# Child = 4
+# Baby = 8
+# Example: Male + Female = 3, All genders = 15
+
+# ContactInfoType values:
+# Email = 1
+# Phone = 2
+# Address = 3
+# SocialMedia = 4
+# Other = 5
 
 ###

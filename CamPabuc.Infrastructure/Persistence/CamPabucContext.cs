@@ -9,42 +9,39 @@ public class CamPabucContext : DbContext
     {
 
     }
-
-    public DbSet<Shoe> Shoes { get; set; }
     public DbSet<Manufacturer> Manufacturers { get; set; }
+    public DbSet<ShoeCategory> ShoeCategories { get; set; }
+    public DbSet<Shoe> Shoes { get; set; }
     public DbSet<Contact> Contacts => Set<Contact>();
     public DbSet<ContactInfo> ContactInfos => Set<ContactInfo>();
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Shoe>(s =>
-        {
-            s.HasKey(s => s.Id);
-            s.Property(s => s.Gender)
-                .HasConversion<int>();
-            s.HasOne<ShoeCategory>()
-                .WithMany(c => c.Shoes)
-                .HasForeignKey(s => s.CategoryId)
-                .OnDelete(DeleteBehavior.SetNull);
-            s.HasOne<Manufacturer>()
-                .WithMany(m => m.Shoes)
-                .HasForeignKey(s => s.ManufacturerId)
-                .OnDelete(DeleteBehavior.SetNull);
-        });
-
         modelBuilder.Entity<Manufacturer>(m =>
         {
             m.HasKey(m => m.Id);
-            m.HasMany(s => s.Shoes);
+            m.HasMany(m => m.Shoes)
+                .WithOne(s => s.Manufacturer)
+                .HasForeignKey(s => s.ManufacturerId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
-
-        modelBuilder.Entity<ShoeCategory>(c =>
+        
+        modelBuilder.Entity<ShoeCategory>(m =>
         {
-            c.HasKey(c => c.Id);
-            c.HasMany(s => s.Shoes);
+            m.HasKey(m => m.Id);
+            m.HasMany(m => m.Shoes)
+                .WithOne(s => s.ShoeCategory)
+                .HasForeignKey(s => s.ShoeCategoryId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
+        modelBuilder.Entity<Shoe>(s =>
+                {
+                    s.HasKey(s => s.Id);
+                    s.Property(s => s.Gender)
+                   .HasConversion<byte>();
+                });
 
         modelBuilder.Entity<Contact>(c =>
         {
@@ -63,9 +60,6 @@ public class CamPabucContext : DbContext
             ci.HasIndex(ci => ci.ContactId)
             .HasDatabaseName("IX_ContactInfo_ContactId");
         });
-
-
-
 
         base.OnModelCreating(modelBuilder);
     }

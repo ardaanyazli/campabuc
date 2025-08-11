@@ -13,8 +13,7 @@ public class Shoe
     public string? Description { get; set; }
     public int Stock { get; set; } = default!;
     public Guid? ManufacturerId { get; set; }
-    public Guid? CategoryId { get; set; }
-
-    public Manufacturer Manufacturer { get; set; }
-    public ShoeCategory ShoeCategory { get; set; }
+    public Manufacturer? Manufacturer { get; set; }
+    public Guid? ShoeCategoryId { get; set; }
+    public ShoeCategory? ShoeCategory { get; set; }
 }

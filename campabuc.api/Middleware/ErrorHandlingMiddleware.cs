@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace CamPabuc.API.Middleware;
 
 public class ErrorHandlingMiddleware
@@ -14,15 +16,15 @@ public class ErrorHandlingMiddleware
     {
         try
         {
-            await _next();
+            await _next(context);
         }
-        catch (OperationCanceledException cancelled)
+        catch (OperationCanceledException)
         {
             throw;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An exception occured for the request path:{path}", context.Request.path);
+            _logger.LogError(ex, "An exception occured for the request path:{path}", context.Request.Path);
 
             if (!context.Response.HasStarted)
             {
