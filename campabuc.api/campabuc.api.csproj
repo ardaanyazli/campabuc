@@ -7,13 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MessagePack.AspNetCoreMvcFormatter" Version="3.1.3" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\campabuc.data\campabuc.data.csproj" />
-    <ProjectReference Include="..\campabuc.model\campabuc.model.csproj" />
+    <ProjectReference Include="..\CamPabuc.Application\CamPabuc.Application.csproj" />
+    <ProjectReference Include="..\CamPabuc.Infrastructure\CamPabuc.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

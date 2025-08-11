@@ -1,21 +1,6 @@
-@campabuc.api_HostAddress = http://localhost:5217
+@CamPabuc.API_HostAddress = http://localhost:5109
 
-GET {{campabuc.api_HostAddress}}/categories/
+GET {{CamPabuc.API_HostAddress}}/weatherforecast/
 Accept: application/json
-;
-GET {{campabuc.api_HostAddress}}/shoes/
-Accept: application/json
-;
-GET {{campabuc.api_HostAddress}}/manufacturers/
-Accept: application/json
-;
-GET {{campabuc.api_HostAddress}}/categories/
-Accept: application/json
-;
-GET {{campabuc.api_HostAddress}}/categories/
-Accept: application/json
-;
-GET {{campabuc.api_HostAddress}}/categories/
-Accept: application/json
-;
+
 ###
