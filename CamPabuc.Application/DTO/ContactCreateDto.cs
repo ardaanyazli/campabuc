@@ -1,4 +1,4 @@
-namespace CamPabuc.Application.DTOs;
+namespace CamPabuc.Application.DTO;
 
 public record ContactCreateDto(
     string FirstName,

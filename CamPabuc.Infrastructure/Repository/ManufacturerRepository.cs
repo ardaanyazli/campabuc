@@ -12,35 +12,35 @@ public class ManufacturerRepository : IManufacturerRepository
     {
         _context = context;
     }
-    public async Task CreateManufacturer(Manufacturer entity,CancellationToken cancellationToken)
+    public async Task CreateManufacturer(Manufacturer manufacturer, CancellationToken cancellationToken)
     {
-    
-        await _context.Manufacturers.AddAsync(entity,cancellationToken);
+
+        await _context.Manufacturers.AddAsync(manufacturer, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeleteManufacturer(Guid id, CancellationToken cancellationToken)
+    public async Task DeleteManufacturer(int id, CancellationToken cancellationToken)
     {
-        var entity= await _context.Manufacturers.FindAsync(id) ?? throw new KeyNotFoundException("Manufacturer Not Found");
-        _context.Manufacturers.Remove(entity);
+        var manufacturer = await _context.Manufacturers.FindAsync(id) ?? throw new KeyNotFoundException("Manufacturer Not Found");
+        _context.Manufacturers.Remove(manufacturer);
 
         await _context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<IList<Manufacturer>> GetAll(CancellationToken cancellationToken)
     {
-        return await _context.Manufacturers.ToListAsync(cancellationToken); 
+        return await _context.Manufacturers.ToListAsync(cancellationToken);
     }
 
-    public async Task<Manufacturer> GetById(Guid id, CancellationToken cancellationToken)
+    public async Task<Manufacturer> GetById(int id, CancellationToken cancellationToken)
     {
-        return await _context.Manufacturers.FindAsync(id,cancellationToken) ?? throw new KeyNotFoundException("Manufacturer Not Found");
+        return await _context.Manufacturers.FindAsync(id, cancellationToken) ?? throw new KeyNotFoundException("Manufacturer Not Found");
     }
 
-    public async Task UpdateManufacturer(Manufacturer entity, CancellationToken cancellationToken)
+    public async Task UpdateManufacturer(Manufacturer manufacturer, CancellationToken cancellationToken)
     {
-        _context.Manufacturers.Update(entity);
-        
+        _context.Manufacturers.Update(manufacturer);
+
         await _context.SaveChangesAsync(cancellationToken);
     }
 }

@@ -4,9 +4,9 @@ namespace CamPabuc.Application.Interface;
 
 public interface IManufacturerRepository
 {
-    Task<IList<Manufacturer>> GetAll(CancellationToken cancellationToken);
-    Task<Manufacturer> GetById(Guid id, CancellationToken cancellationToken);
-    Task CreateManufacturer(Manufacturer entity, CancellationToken cancellationToken);
-    Task UpdateManufacturer(Manufacturer entity, CancellationToken cancellationToken);
-    Task DeleteManufacturer(Guid id, CancellationToken cancellationToken);
+    Task<IList<Manufacturer>> GetManufacturersAsync(CancellationToken cancellationToken);
+    Task<Manufacturer> GetManufacturerAsync(int id, CancellationToken cancellationToken);
+    Task CreateManufacturerAsync(Manufacturer manufacturer, CancellationToken cancellationToken);
+    void UpdateManufacturer(Manufacturer manufacturer, CancellationToken cancellationToken);
+    Task DeleteManufacturerAsync(int id, CancellationToken cancellationToken);
 }

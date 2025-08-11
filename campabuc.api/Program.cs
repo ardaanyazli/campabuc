@@ -17,9 +17,7 @@ builder.Services.AddDbContext<CamPabucContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("CamPabucConnection")));
 
 // Register repositories
-builder.Services.AddScoped<IShoeRepository, ShoeRepository>();
-builder.Services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
-builder.Services.AddScoped<IContactsUnitOfWork, ContactsUnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Add CORS if needed
 builder.Services.AddCors(options =>
@@ -40,28 +38,21 @@ app.UseMiddleware<RequestCancellationMiddleware>();
 app.UseHttpsRedirection();
 
 // SHOE ENDPOINTS
-app.MapGet("/api/shoes", async (IShoeRepository shoeRepository, CancellationToken cancellationToken) =>
+app.MapGet("/api/shoes", async (IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
-    var shoes = await shoeRepository.GetAll(cancellationToken);
-    var shoeList = shoes.Select(s => new ShoeListDto(
-        s.Id, 
-        s.Barcode, 
-        s.Price, 
-        s.Stock, 
-        s.Color, 
-        GetGenderNames(s.Gender)
-    )).ToList();
-    
-    return Results.Ok(shoeList);
+    var shoes = await unitOfWork.ShoeRepository.GetShoesAsync(cancellationToken);
+
 })
 .WithName("GetAllShoes")
 .WithOpenApi();
 
-app.MapGet("/api/shoes/{id:guid}", async (Guid id, IShoeRepository shoeRepository, CancellationToken cancellationToken) =>
+app.MapGet("/api/shoes/{id:guid}", async (Guid id, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     try
     {
-        var shoe = await shoeRepository.GetById(id, cancellationToken);
+        var shoe = await unitOfWork.ShoeRepository.GetShoeAsync(id, cancellationToken).ToDetailDto();
+
+
         return Results.Ok(shoe);
     }
     catch (KeyNotFoundException)
@@ -72,29 +63,29 @@ app.MapGet("/api/shoes/{id:guid}", async (Guid id, IShoeRepository shoeRepositor
 .WithName("GetShoeById")
 .WithOpenApi();
 
-app.MapPost("/api/shoes", async (Shoe shoe, IShoeRepository shoeRepository, CancellationToken cancellationToken) =>
+app.MapPost("/api/shoes", async (Shoe shoe, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     shoe.Id = Guid.NewGuid();
     shoe.CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
     shoe.UpdatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
     shoe.IsActive = true;
-    
-    await shoeRepository.CreateShoe(shoe, cancellationToken);
+    await unitOfWork.ShoeRepository.CreateShoeAsync(shoe, cancellationToken);
+
     return Results.Created($"/api/shoes/{shoe.Id}", shoe);
 })
 .WithName("CreateShoe")
 .WithOpenApi();
 
-app.MapPut("/api/shoes/{id:guid}", async (Guid id, Shoe shoe, IShoeRepository shoeRepository, CancellationToken cancellationToken) =>
+app.MapPut("/api/shoes/{id:guid}", async (Guid id, Shoe shoe, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     try
     {
-        var existingShoe = await shoeRepository.GetById(id, cancellationToken);
+        var existingShoe = await unitOfWork.ShoeRepository.GetShoeAsync(id, cancellationToken);
         shoe.Id = id;
         shoe.CreatedAt = existingShoe.CreatedAt;
         shoe.UpdatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
-        
-        await shoeRepository.UpdateShoe(shoe, cancellationToken);
+        unitOfWork.ShoeRepository.UpdateShoe(shoe);
+
         return Results.Ok(shoe);
     }
     catch (KeyNotFoundException)
@@ -105,11 +96,11 @@ app.MapPut("/api/shoes/{id:guid}", async (Guid id, Shoe shoe, IShoeRepository sh
 .WithName("UpdateShoe")
 .WithOpenApi();
 
-app.MapDelete("/api/shoes/{id:guid}", async (Guid id, IShoeRepository shoeRepository, CancellationToken cancellationToken) =>
+app.MapDelete("/api/shoes/{id:guid}", async (Guid id, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     try
     {
-        await shoeRepository.DeleteShoe(id, cancellationToken);
+        await unitOfWork.ShoeRepository.DeleteShoeAsync(id, cancellationToken);
         return Results.NoContent();
     }
     catch (KeyNotFoundException)
@@ -121,19 +112,19 @@ app.MapDelete("/api/shoes/{id:guid}", async (Guid id, IShoeRepository shoeReposi
 .WithOpenApi();
 
 // MANUFACTURER ENDPOINTS
-app.MapGet("/api/manufacturers", async (IManufacturerRepository manufacturerRepository, CancellationToken cancellationToken) =>
+app.MapGet("/api/manufacturers", async (IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
-    var manufacturers = await manufacturerRepository.GetAll(cancellationToken);
+    var manufacturers = await unitOfWork.ManufacturerRepository.GetAll(cancellationToken);
     return Results.Ok(manufacturers);
 })
 .WithName("GetAllManufacturers")
 .WithOpenApi();
 
-app.MapGet("/api/manufacturers/{id:guid}", async (Guid id, IManufacturerRepository manufacturerRepository, CancellationToken cancellationToken) =>
+app.MapGet("/api/manufacturers/{id:guid}", async (Guid id, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     try
     {
-        var manufacturer = await manufacturerRepository.GetById(id, cancellationToken);
+        var manufacturer = await unitOfWork.ManufacturerRepository.GetById(id, cancellationToken);
         return Results.Ok(manufacturer);
     }
     catch (KeyNotFoundException)
@@ -144,29 +135,27 @@ app.MapGet("/api/manufacturers/{id:guid}", async (Guid id, IManufacturerReposito
 .WithName("GetManufacturerById")
 .WithOpenApi();
 
-app.MapPost("/api/manufacturers", async (Manufacturer manufacturer, IManufacturerRepository manufacturerRepository, CancellationToken cancellationToken) =>
+app.MapPost("/api/manufacturers", async (Manufacturer manufacturer, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     manufacturer.Id = Guid.NewGuid();
     manufacturer.CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
     manufacturer.UpdatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
     manufacturer.IsActive = true;
-    
-    await manufacturerRepository.CreateManufacturer(manufacturer, cancellationToken);
+    await unitOfWork.ManufacturerRepository.CreateManufacturer(manufacturer, cancellationToken);
     return Results.Created($"/api/manufacturers/{manufacturer.Id}", manufacturer);
 })
 .WithName("CreateManufacturer")
 .WithOpenApi();
 
-app.MapPut("/api/manufacturers/{id:guid}", async (Guid id, Manufacturer manufacturer, IManufacturerRepository manufacturerRepository, CancellationToken cancellationToken) =>
+app.MapPut("/api/manufacturers/{id:guid}", async (Guid id, Manufacturer manufacturer, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     try
     {
-        var existingManufacturer = await manufacturerRepository.GetById(id, cancellationToken);
+        var existingManufacturer = await unitOfWork.ManufacturerRepository.GetById(id, cancellationToken);
         manufacturer.Id = id;
         manufacturer.CreatedAt = existingManufacturer.CreatedAt;
         manufacturer.UpdatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
-        
-        await manufacturerRepository.UpdateManufacturer(manufacturer, cancellationToken);
+        await unitOfWork.ManufacturerRepository.UpdateManufacturer(manufacturer, cancellationToken);
         return Results.Ok(manufacturer);
     }
     catch (KeyNotFoundException)
@@ -177,11 +166,11 @@ app.MapPut("/api/manufacturers/{id:guid}", async (Guid id, Manufacturer manufact
 .WithName("UpdateManufacturer")
 .WithOpenApi();
 
-app.MapDelete("/api/manufacturers/{id:guid}", async (Guid id, IManufacturerRepository manufacturerRepository, CancellationToken cancellationToken) =>
+app.MapDelete("/api/manufacturers/{id:guid}", async (Guid id, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     try
     {
-        await manufacturerRepository.DeleteManufacturer(id, cancellationToken);
+        await unitOfWork.ManufacturerRepository.DeleteManufacturer(id, cancellationToken);
         return Results.NoContent();
     }
     catch (KeyNotFoundException)
@@ -193,7 +182,7 @@ app.MapDelete("/api/manufacturers/{id:guid}", async (Guid id, IManufacturerRepos
 .WithOpenApi();
 
 // CONTACT ENDPOINTS
-app.MapGet("/api/contacts", async (IContactsUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
+app.MapGet("/api/contacts", async (IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     var contacts = await unitOfWork.ContactRepository.GetContactsAsync(cancellationToken);
     return Results.Ok(contacts);
@@ -201,7 +190,7 @@ app.MapGet("/api/contacts", async (IContactsUnitOfWork unitOfWork, CancellationT
 .WithName("GetAllContacts")
 .WithOpenApi();
 
-app.MapGet("/api/contacts/{id:guid}", async (Guid id, IContactsUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
+app.MapGet("/api/contacts/{id:guid}", async (Guid id, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     try
     {
@@ -216,22 +205,20 @@ app.MapGet("/api/contacts/{id:guid}", async (Guid id, IContactsUnitOfWork unitOf
 .WithName("GetContactById")
 .WithOpenApi();
 
-app.MapPost("/api/contacts", async (Contact contact, IContactsUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
+app.MapPost("/api/contacts", async (Contact contact, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     contact.Id = Guid.NewGuid();
     contact.CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
     contact.UpdatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
     contact.IsActive = true;
-    
     await unitOfWork.ContactRepository.CreateContactAsync(contact, cancellationToken);
     await unitOfWork.SaveChangesAsync(cancellationToken);
-    
     return Results.Created($"/api/contacts/{contact.Id}", contact);
 })
 .WithName("CreateContact")
 .WithOpenApi();
 
-app.MapPut("/api/contacts/{id:guid}", async (Guid id, Contact contact, IContactsUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
+app.MapPut("/api/contacts/{id:guid}", async (Guid id, Contact contact, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     try
     {
@@ -239,10 +226,9 @@ app.MapPut("/api/contacts/{id:guid}", async (Guid id, Contact contact, IContacts
         contact.Id = id;
         contact.CreatedAt = existingContact.CreatedAt;
         contact.UpdatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
-        
         unitOfWork.ContactRepository.UpdateContact(contact);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         return Results.Ok(contact);
     }
     catch (NullReferenceException)
@@ -253,12 +239,13 @@ app.MapPut("/api/contacts/{id:guid}", async (Guid id, Contact contact, IContacts
 .WithName("UpdateContact")
 .WithOpenApi();
 
-app.MapDelete("/api/contacts/{id:guid}", async (Guid id, IContactsUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
+app.MapDelete("/api/contacts/{id:guid}", async (Guid id, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     try
     {
         await unitOfWork.ContactRepository.DeleteContactAsync(id, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
+
         return Results.NoContent();
     }
     catch (NullReferenceException)
@@ -270,19 +257,21 @@ app.MapDelete("/api/contacts/{id:guid}", async (Guid id, IContactsUnitOfWork uni
 .WithOpenApi();
 
 // CONTACT INFO ENDPOINTS
-app.MapGet("/api/contactinfos", async (IContactsUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
+app.MapGet("/api/contactinfos", async (IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     var contactInfos = await unitOfWork.ContactInfoRepository.GetContactInfosAsync(cancellationToken);
+
     return Results.Ok(contactInfos);
 })
 .WithName("GetAllContactInfos")
 .WithOpenApi();
 
-app.MapGet("/api/contactinfos/{id:guid}", async (Guid id, IContactsUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
+app.MapGet("/api/contactinfos/{id:guid}", async (Guid id, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     try
     {
         var contactInfo = await unitOfWork.ContactInfoRepository.GetContactInfoAsync(id, cancellationToken);
+
         return Results.Ok(contactInfo);
     }
     catch (KeyNotFoundException)
@@ -293,11 +282,12 @@ app.MapGet("/api/contactinfos/{id:guid}", async (Guid id, IContactsUnitOfWork un
 .WithName("GetContactInfoById")
 .WithOpenApi();
 
-app.MapGet("/api/contacts/{contactId:guid}/contactinfos", async (Guid contactId, IContactsUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
+app.MapGet("/api/contacts/{contactId:guid}/contactinfos", async (Guid contactId, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     try
     {
         var contactInfos = await unitOfWork.ContactInfoRepository.GetContactInfoByContactIdAsync(contactId, cancellationToken);
+
         return Results.Ok(contactInfos);
     }
     catch (KeyNotFoundException)
@@ -308,22 +298,22 @@ app.MapGet("/api/contacts/{contactId:guid}/contactinfos", async (Guid contactId,
 .WithName("GetContactInfosByContactId")
 .WithOpenApi();
 
-app.MapPost("/api/contactinfos", async (ContactInfo contactInfo, IContactsUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
+app.MapPost("/api/contactinfos", async (ContactInfo contactInfo, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     contactInfo.Id = Guid.NewGuid();
     contactInfo.CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
     contactInfo.UpdatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
     contactInfo.IsActive = true;
-    
+
     await unitOfWork.ContactInfoRepository.AddContactInfoAsync(contactInfo, cancellationToken);
     await unitOfWork.SaveChangesAsync(cancellationToken);
-    
+
     return Results.Created($"/api/contactinfos/{contactInfo.Id}", contactInfo);
 })
 .WithName("CreateContactInfo")
 .WithOpenApi();
 
-app.MapPut("/api/contactinfos/{id:guid}", async (Guid id, ContactInfo contactInfo, IContactsUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
+app.MapPut("/api/contactinfos/{id:guid}", async (Guid id, ContactInfo contactInfo, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     try
     {
@@ -331,10 +321,9 @@ app.MapPut("/api/contactinfos/{id:guid}", async (Guid id, ContactInfo contactInf
         contactInfo.Id = id;
         contactInfo.CreatedAt = existingContactInfo.CreatedAt;
         contactInfo.UpdatedAt = DateOnly.FromDateTime(DateTime.UtcNow);
-        
         unitOfWork.ContactInfoRepository.UpdateContactInfo(contactInfo);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         return Results.Ok(contactInfo);
     }
     catch (KeyNotFoundException)
@@ -345,12 +334,13 @@ app.MapPut("/api/contactinfos/{id:guid}", async (Guid id, ContactInfo contactInf
 .WithName("UpdateContactInfo")
 .WithOpenApi();
 
-app.MapDelete("/api/contactinfos/{id:guid}", async (Guid id, IContactsUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
+app.MapDelete("/api/contactinfos/{id:guid}", async (Guid id, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
 {
     try
     {
         await unitOfWork.ContactInfoRepository.DeleteContactInfoAsync(id, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
+
         return Results.NoContent();
     }
     catch (KeyNotFoundException)
@@ -381,7 +371,6 @@ app.Run();
 static List<string> GetGenderNames(ShoeGender gender)
 {
     var genders = new List<string>();
-    
     if (gender.HasFlag(ShoeGender.Male))
         genders.Add("Male");
     if (gender.HasFlag(ShoeGender.Female))
@@ -390,6 +379,5 @@ static List<string> GetGenderNames(ShoeGender gender)
         genders.Add("Child");
     if (gender.HasFlag(ShoeGender.Baby))
         genders.Add("Baby");
-    
     return genders;
 }

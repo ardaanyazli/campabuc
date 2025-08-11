@@ -4,18 +4,24 @@ using CamPabuc.Infrastructure.Persistence;
 
 namespace CamPabuc.Infrastructure.Repository;
 
-public class ContactsUnitOfWork : IContactsUnitOfWork
+public class UnitOfWork : IUnitOfWork
 {
 
     private readonly CamPabucContext _context;
 
-    public ContactsUnitOfWork(CamPabucContext context)
+    public UnitOfWork(CamPabucContext context)
     {
         _context = context;
         ContactRepository = new ContactRepository(_context);
         ContactInfoRepository = new ContactInfoRepository(_context);
+        ShoeRepository = new ShoeRepository(_context);
+        ManufacturerRepository = new ManufacturerRepository(_context);
     }
-    
+
+    public IShoeRepository ShoeRepository { get; }
+
+    public IManufacturerRepository ManufacturerRepository { get; }
+
     public IContactRepository ContactRepository { get; }
 
     public IContactInfoRepository ContactInfoRepository { get; }

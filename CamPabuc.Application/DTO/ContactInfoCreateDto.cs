@@ -1,6 +1,6 @@
 using CamPabuc.Domain.Enums;
 
-namespace CamPabuc.Application.DTOs;
+namespace CamPabuc.Application.DTO;
 
 public record ContactInfoCreateDto(
     ContactInfoType ContactInfoType,

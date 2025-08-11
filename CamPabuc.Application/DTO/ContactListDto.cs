@@ -1,4 +1,4 @@
-namespace ContactBook.Contects.Application.DTOs;
+namespace ContactBook.Contects.Application.DTO;
 
 public record ContactListDto(
     Guid Id,
