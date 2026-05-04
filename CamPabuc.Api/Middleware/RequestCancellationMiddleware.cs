@@ -1,4 +1,4 @@
-namespace CamPabuc.API.Middleware;
+namespace CamPabuc.Api.Middleware;
 
 public class RequestCancellationMiddleware
 {

@@ -5,6 +5,6 @@ public static class BarcodeGenerator
 {
     public static string GenerateBarcode(this Shoe entity)
     {
-        return $"{}"
+        return $"{entity}";
     }
 }

@@ -26,7 +26,7 @@ public class CamPabucContext : DbContext
                 .HasForeignKey(s => s.ManufacturerId)
                 .OnDelete(DeleteBehavior.SetNull);
         });
-        
+
         modelBuilder.Entity<ShoeCategory>(m =>
         {
             m.HasKey(m => m.Id);

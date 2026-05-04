@@ -15,15 +15,14 @@ public class UnitOfWork : IUnitOfWork
         ContactRepository = new ContactRepository(_context);
         ContactInfoRepository = new ContactInfoRepository(_context);
         ShoeRepository = new ShoeRepository(_context);
+        ShoeCategoryRepository = new ShoeCategoryRepository(_context);
         ManufacturerRepository = new ManufacturerRepository(_context);
     }
 
     public IShoeRepository ShoeRepository { get; }
-
+    public IShoeCategoryRepository ShoeCategoryRepository { get; }
     public IManufacturerRepository ManufacturerRepository { get; }
-
     public IContactRepository ContactRepository { get; }
-
     public IContactInfoRepository ContactInfoRepository { get; }
 
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
