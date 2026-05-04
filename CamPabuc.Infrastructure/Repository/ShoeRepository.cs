@@ -15,7 +15,6 @@ public class ShoeRepository : IShoeRepository
     }
     public async Task CreateShoe(Shoe entity,CancellationToken cancellationToken)
     {
-    
         await _context.Shoes.AddAsync(entity,cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
     }

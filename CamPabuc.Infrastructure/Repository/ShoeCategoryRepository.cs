@@ -17,6 +17,7 @@ public class ShoeCategoryRepository : IShoeCategoryRepository
 	public Task AddShoeCategoryAsync(ShoeCategory shoeCategory, CancellationToken cancellationToken = default)
 	{
 		await _context.ShoeCategories.AddAsync(shoeCategory,cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
 	}
 
 	public Task DeleteShoeCategoryAsync(int id, CancellationToken cancellationToken = default)
