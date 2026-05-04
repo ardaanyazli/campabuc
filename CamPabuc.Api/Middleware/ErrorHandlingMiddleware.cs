@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace CamPabuc.API.Middleware;
+namespace CamPabuc.Api.Middleware;
 
 public class ErrorHandlingMiddleware
 {
