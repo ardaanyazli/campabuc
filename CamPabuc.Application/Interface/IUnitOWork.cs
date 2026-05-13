@@ -2,10 +2,14 @@ namespace CamPabuc.Application.Interface;
 
 public interface IUnitOfWork
 {
-    IShoeRepository ShoeRepository { get; }
     IManufacturerRepository ManufacturerRepository { get; }
+    IShoeCategoryRepository ShoeCategoryRepository { get; }
+    IShoeModelRepository ShoeModelRepository { get; }
+    IShoeVariantRepository ShoeVariantRepository { get; }
+    IPurchaseOrderRepository PurchaseOrderRepository { get; }
+    ISaleRepository SaleRepository { get; }
+    IStockAdjustmentRepository StockAdjustmentRepository { get; }
     IContactRepository ContactRepository { get; }
     IContactInfoRepository ContactInfoRepository { get; }
-    IShoeCategoryRepository ShoeCategoryRepository { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

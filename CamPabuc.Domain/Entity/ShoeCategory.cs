@@ -4,5 +4,5 @@ public class ShoeCategory : BaseEntity, IHasIntKey
     public int Id { get; set; }
     public string Name { get; set; } = default!;
 
-    public IList<Shoe>? Shoes { get; set; }
+    public IList<ShoeModel>? ShoeModels { get; set; }
 }

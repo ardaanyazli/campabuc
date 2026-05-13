@@ -1,4 +1,3 @@
-
 namespace CamPabuc.Domain.Entity;
 
 public class Manufacturer : BaseEntity, IHasIntKey
@@ -7,5 +6,5 @@ public class Manufacturer : BaseEntity, IHasIntKey
     public string Name { get; set; } = default!;
     public string Phone { get; set; } = default!;
     public string Address { get; set; } = default!;
-    public IList<Shoe>? Shoes { get; set; }
+    public IList<ShoeModel>? ShoeModels { get; set; }
 }
