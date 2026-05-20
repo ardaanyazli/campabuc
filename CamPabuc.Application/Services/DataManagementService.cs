@@ -10,25 +10,18 @@ public interface IDataManagementService
     Task BackupToCloudAsync();
 }
 
-public class DataManagementService : IDataManagementService
+public class DataManagementService(IUnitOfWork uow) : IDataManagementService
 {
-    private readonly IUnitOfWork _uow;
-
-    public DataManagementService(IUnitOfWork uow)
-    {
-        _uow = uow;
-    }
-
     public async Task ExportDatabaseAsync(string filePath)
     {
         var data = new
         {
-            Manufacturers = await _uow.ManufacturerRepository.GetManufacturersAsync(default),
-            ShoeModels = await _uow.ShoeModelRepository.GetShoeModelsAsync(default),
-            ShoeVariants = await _uow.ShoeVariantRepository.GetVariantsAsync(default),
-            PurchaseOrders = await _uow.PurchaseOrderRepository.GetPurchaseOrdersAsync(default),
-            Sales = await _uow.SaleRepository.GetSalesAsync(default),
-            StockAdjustments = await _uow.StockAdjustmentRepository.GetAdjustmentsAsync(default)
+            Manufacturers = await uow.ManufacturerRepository.GetManufacturersAsync(default),
+            ShoeModels = await uow.ShoeModelRepository.GetShoeModelsAsync(default),
+            ShoeVariants = await uow.ShoeVariantRepository.GetVariantsAsync(default),
+            PurchaseOrders = await uow.PurchaseOrderRepository.GetPurchaseOrdersAsync(default),
+            Sales = await uow.SaleRepository.GetSalesAsync(default),
+            StockAdjustments = await uow.StockAdjustmentRepository.GetAdjustmentsAsync(default)
         };
 
         var json = System.Text.Json.JsonSerializer.Serialize(data, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });

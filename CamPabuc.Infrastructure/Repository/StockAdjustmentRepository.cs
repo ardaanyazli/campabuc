@@ -5,40 +5,33 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CamPabuc.Infrastructure.Repository;
 
-public class StockAdjustmentRepository : IStockAdjustmentRepository
+public class StockAdjustmentRepository(CamPabucContext context) : IStockAdjustmentRepository
 {
-    private readonly CamPabucContext _context;
-
-    public StockAdjustmentRepository(CamPabucContext context)
-    {
-        _context = context;
-    }
-
     public async Task<IList<StockAdjustment>> GetAdjustmentsAsync(CancellationToken cancellationToken)
     {
-        return await _context.StockAdjustments.ToListAsync(cancellationToken);
+        return await context.StockAdjustments.ToListAsync(cancellationToken);
     }
 
     public async Task<StockAdjustment> GetAdjustmentAsync(int id, CancellationToken cancellationToken)
     {
-        return await _context.StockAdjustments.FindAsync(id, cancellationToken) ?? throw new KeyNotFoundException("Stock Adjustment Not Found");
+        return await context.StockAdjustments.FindAsync(id, cancellationToken) ?? throw new KeyNotFoundException("Stock Adjustment Not Found");
     }
 
     public async Task CreateAdjustmentAsync(StockAdjustment adjustment, CancellationToken cancellationToken)
     {
-        await _context.StockAdjustments.AddAsync(adjustment, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.StockAdjustments.AddAsync(adjustment, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     public void UpdateAdjustment(StockAdjustment adjustment)
     {
-        _context.StockAdjustments.Update(adjustment);
+        context.StockAdjustments.Update(adjustment);
     }
 
     public async Task DeleteAdjustmentAsync(int id, CancellationToken cancellationToken)
     {
-        var adjustment = await _context.StockAdjustments.FindAsync(id, cancellationToken) ?? throw new KeyNotFoundException("Stock Adjustment Not Found");
-        _context.StockAdjustments.Remove(adjustment);
-        await _context.SaveChangesAsync(cancellationToken);
+        var adjustment = await context.StockAdjustments.FindAsync(id, cancellationToken) ?? throw new KeyNotFoundException("Stock Adjustment Not Found");
+        context.StockAdjustments.Remove(adjustment);
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

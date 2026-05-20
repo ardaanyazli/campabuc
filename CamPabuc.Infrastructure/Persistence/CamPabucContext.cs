@@ -3,11 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CamPabuc.Infrastructure.Persistence;
 
-public class CamPabucContext : DbContext
+public class CamPabucContext(DbContextOptions options) : DbContext(options)
 {
-    public CamPabucContext(DbContextOptions options) : base(options)
-    {
-    }
     public DbSet<Manufacturer> Manufacturers { get; set; }
     public DbSet<ShoeCategory> ShoeCategories { get; set; }
     public DbSet<ShoeModel> ShoeModels { get; set; }

@@ -6,17 +6,14 @@ namespace CamPabuc.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CheckoutController : ControllerBase
+public class CheckoutController(ICheckoutService checkoutService) : ControllerBase
 {
-    private readonly ICheckoutService _checkoutService;
-    public CheckoutController(ICheckoutService checkoutService) => _checkoutService = checkoutService;
-
     [HttpPost("calculate")]
     public IActionResult Calculate([FromBody] CalculationRequest request)
     {
-        var subtotal = _checkoutService.CalculateSubtotal(request.Items);
-        var discount = _checkoutService.ApplyDiscount(subtotal, request.DiscountPercent, request.FixedDiscount);
-        var total = _checkoutService.CalculateTotal(subtotal, request.TaxRate, discount);
+        var subtotal = checkoutService.CalculateSubtotal(request.Items);
+        var discount = checkoutService.ApplyDiscount(subtotal, request.DiscountPercent, request.FixedDiscount);
+        var total = checkoutService.CalculateTotal(subtotal, request.TaxRate, discount);
         
         return Ok(new { Subtotal = subtotal, Discount = discount, Total = total });
     }
@@ -24,7 +21,7 @@ public class CheckoutController : ControllerBase
     [HttpPost("finalize")]
     public async Task<IActionResult> Finalize(Sale sale, CancellationToken ct)
     {
-        await _checkoutService.FinalizeSale(sale, ct);
+        await checkoutService.FinalizeSale(sale, ct);
         return Ok();
     }
 

@@ -5,14 +5,11 @@ namespace CamPabuc.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SalesController : ControllerBase
+public class SalesController(ISaleRepository repo) : ControllerBase
 {
-    private readonly ISaleRepository _repo;
-    public SalesController(ISaleRepository repo) => _repo = repo;
-
     [HttpGet]
-    public async Task<IActionResult> GetAll(CancellationToken ct) => Ok(await _repo.GetSalesAsync(ct));
+    public async Task<IActionResult> GetAll(CancellationToken ct) => Ok(await repo.GetSalesAsync(ct));
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id, CancellationToken ct) => Ok(await _repo.GetSaleAsync(id, ct));
+    public async Task<IActionResult> Get(int id, CancellationToken ct) => Ok(await repo.GetSaleAsync(id, ct));
 }

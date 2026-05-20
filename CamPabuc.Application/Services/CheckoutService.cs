@@ -11,17 +11,8 @@ public interface ICheckoutService
     Task FinalizeSale(Sale sale, CancellationToken ct);
 }
 
-public class CheckoutService : ICheckoutService
+public class CheckoutService(ISaleRepository saleRepo, IUnitOfWork unitOfWork) : ICheckoutService
 {
-    private readonly ISaleRepository _saleRepo;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public CheckoutService(ISaleRepository saleRepo, IUnitOfWork unitOfWork)
-    {
-        _saleRepo = saleRepo;
-        _unitOfWork = unitOfWork;
-    }
-
     public decimal CalculateSubtotal(IList<SaleItem> items)
     {
         return items.Sum(i => i.PriceAtSale * i.Quantity);
@@ -41,7 +32,7 @@ public class CheckoutService : ICheckoutService
 
     public async Task FinalizeSale(Sale sale, CancellationToken ct)
     {
-        await _saleRepo.CreateSaleAsync(sale, ct);
-        await _unitOfWork.SaveChangesAsync(ct);
+        await saleRepo.CreateSaleAsync(sale, ct);
+        await unitOfWork.SaveChangesAsync(ct);
     }
 }

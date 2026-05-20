@@ -1,25 +1,16 @@
 namespace CamPabuc.Api.Middleware;
 
-public class RequestCancellationMiddleware
+public class RequestCancellationMiddleware(RequestDelegate next, ILogger<RequestCancellationMiddleware> logger)
 {
-    private readonly RequestDelegate _next;
-    private readonly ILogger<RequestCancellationMiddleware> _logger;
-
-    public RequestCancellationMiddleware(RequestDelegate next, ILogger<RequestCancellationMiddleware> logger)
-    {
-        _next = next;
-        _logger = logger;
-    }
-
     public async Task InvokeAsync(HttpContext context)
     {
         try
         {
-            await _next(context);
+            await next(context);
         }
         catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
         {
-            _logger.LogWarning("Request was cancelled by the client. Path: {Path}", context.Request.Path);
+            logger.LogWarning("Request was cancelled by the client. Path: {Path}", context.Request.Path);
 
             if (!context.Response.HasStarted)
             {

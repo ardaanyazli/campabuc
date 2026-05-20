@@ -7,37 +7,34 @@ namespace CamPabuc.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ShoeModelsController : ControllerBase
+public class ShoeModelsController(IShoeModelRepository repo) : ControllerBase
 {
-    private readonly IShoeModelRepository _repo;
-    public ShoeModelsController(IShoeModelRepository repo) => _repo = repo;
-
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken ct) 
-        => Ok(await _repo.GetShoeModelsAsync(ct));
+        => Ok(await repo.GetShoeModelsAsync(ct));
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id, CancellationToken ct) 
-        => Ok(await _repo.GetShoeModelAsync(id, ct));
+        => Ok(await repo.GetShoeModelAsync(id, ct));
 
     [HttpPost]
     public async Task<IActionResult> Create(ShoeModel model, CancellationToken ct)
     {
-        await _repo.CreateShoeModelAsync(model, ct);
+        await repo.CreateShoeModelAsync(model, ct);
         return Ok();
     }
 
     [HttpPut]
     public IActionResult Update(ShoeModel model)
     {
-        _repo.UpdateShoeModel(model);
+        repo.UpdateShoeModel(model);
         return Ok();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        await _repo.DeleteShoeModelAsync(id, ct);
+        await repo.DeleteShoeModelAsync(id, ct);
         return Ok();
     }
 }

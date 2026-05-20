@@ -2,16 +2,11 @@ using System.Text.Json;
 
 namespace CamPabuc.Api.Middleware;
 
-public class ErrorHandlingMiddleware
+public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
 {
-    public readonly RequestDelegate _next;
-    public readonly ILogger<ErrorHandlingMiddleware> _logger;
+    public readonly RequestDelegate _next = next;
+    public readonly ILogger<ErrorHandlingMiddleware> _logger = logger;
 
-    public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
-    {
-        _next = next;
-        _logger = logger;
-    }
     public async Task InvokeAsync(HttpContext context)
     {
         try
